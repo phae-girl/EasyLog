@@ -1,0 +1,337 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9155C9121649D91C000034EC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9155C9111649D91C000034EC /* Cocoa.framework */; };
+		9155C91C1649D91C000034EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9155C91A1649D91C000034EC /* InfoPlist.strings */; };
+		9155C91E1649D91D000034EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9155C91D1649D91D000034EC /* main.m */; };
+		9155C9221649D91D000034EC /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 9155C9201649D91D000034EC /* Credits.rtf */; };
+		9155C9251649D91D000034EC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9155C9241649D91D000034EC /* AppDelegate.m */; };
+		9155C9281649D91D000034EC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9155C9261649D91D000034EC /* MainMenu.xib */; };
+		9155C92B1649D91D000034EC /* EasyLog.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9155C9291649D91D000034EC /* EasyLog.xcdatamodeld */; };
+		9155C93C1649FD65000034EC /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 9155C93B1649FD65000034EC /* Session.m */; };
+		9155C93F1649FD65000034EC /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 9155C93E1649FD65000034EC /* Project.m */; };
+		9155C941164A0219000034EC /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9155C940164A0219000034EC /* Icon.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		9155C90D1649D91C000034EC /* EasyLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9155C9111649D91C000034EC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		9155C9141649D91C000034EC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		9155C9151649D91C000034EC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		9155C9161649D91C000034EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		9155C9191649D91C000034EC /* EasyLog-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EasyLog-Info.plist"; sourceTree = "<group>"; };
+		9155C91B1649D91C000034EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9155C91D1649D91D000034EC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		9155C91F1649D91D000034EC /* EasyLog-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EasyLog-Prefix.pch"; sourceTree = "<group>"; };
+		9155C9211649D91D000034EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		9155C9231649D91D000034EC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		9155C9241649D91D000034EC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		9155C9271649D91D000034EC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		9155C92A1649D91D000034EC /* EasyLog.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EasyLog.xcdatamodel; sourceTree = "<group>"; };
+		9155C93A1649FD65000034EC /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
+		9155C93B1649FD65000034EC /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
+		9155C93D1649FD65000034EC /* Project.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Project.h; sourceTree = "<group>"; };
+		9155C93E1649FD65000034EC /* Project.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Project.m; sourceTree = "<group>"; };
+		9155C940164A0219000034EC /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9155C90A1649D91C000034EC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9155C9121649D91C000034EC /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9155C9021649D91C000034EC = {
+			isa = PBXGroup;
+			children = (
+				9155C9171649D91C000034EC /* EasyLog */,
+				9155C9101649D91C000034EC /* Frameworks */,
+				9155C90E1649D91C000034EC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9155C90E1649D91C000034EC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9155C90D1649D91C000034EC /* EasyLog.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9155C9101649D91C000034EC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9155C9111649D91C000034EC /* Cocoa.framework */,
+				9155C9131649D91C000034EC /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9155C9131649D91C000034EC /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9155C9141649D91C000034EC /* AppKit.framework */,
+				9155C9151649D91C000034EC /* CoreData.framework */,
+				9155C9161649D91C000034EC /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		9155C9171649D91C000034EC /* EasyLog */ = {
+			isa = PBXGroup;
+			children = (
+				9155C9231649D91D000034EC /* AppDelegate.h */,
+				9155C9241649D91D000034EC /* AppDelegate.m */,
+				9155C9261649D91D000034EC /* MainMenu.xib */,
+				9155C9291649D91D000034EC /* EasyLog.xcdatamodeld */,
+				9155C93D1649FD65000034EC /* Project.h */,
+				9155C93E1649FD65000034EC /* Project.m */,
+				9155C93A1649FD65000034EC /* Session.h */,
+				9155C93B1649FD65000034EC /* Session.m */,
+				9155C9181649D91C000034EC /* Supporting Files */,
+			);
+			path = EasyLog;
+			sourceTree = "<group>";
+		};
+		9155C9181649D91C000034EC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9155C940164A0219000034EC /* Icon.png */,
+				9155C9191649D91C000034EC /* EasyLog-Info.plist */,
+				9155C91A1649D91C000034EC /* InfoPlist.strings */,
+				9155C91D1649D91D000034EC /* main.m */,
+				9155C91F1649D91D000034EC /* EasyLog-Prefix.pch */,
+				9155C9201649D91D000034EC /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9155C90C1649D91C000034EC /* EasyLog */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9155C92E1649D91D000034EC /* Build configuration list for PBXNativeTarget "EasyLog" */;
+			buildPhases = (
+				9155C9091649D91C000034EC /* Sources */,
+				9155C90A1649D91C000034EC /* Frameworks */,
+				9155C90B1649D91C000034EC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EasyLog;
+			productName = EasyLog;
+			productReference = 9155C90D1649D91C000034EC /* EasyLog.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9155C9041649D91C000034EC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Phaedra Deepsky";
+			};
+			buildConfigurationList = 9155C9071649D91C000034EC /* Build configuration list for PBXProject "EasyLog" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 9155C9021649D91C000034EC;
+			productRefGroup = 9155C90E1649D91C000034EC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9155C90C1649D91C000034EC /* EasyLog */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9155C90B1649D91C000034EC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9155C91C1649D91C000034EC /* InfoPlist.strings in Resources */,
+				9155C9221649D91D000034EC /* Credits.rtf in Resources */,
+				9155C9281649D91D000034EC /* MainMenu.xib in Resources */,
+				9155C941164A0219000034EC /* Icon.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9155C9091649D91C000034EC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9155C91E1649D91D000034EC /* main.m in Sources */,
+				9155C9251649D91D000034EC /* AppDelegate.m in Sources */,
+				9155C92B1649D91D000034EC /* EasyLog.xcdatamodeld in Sources */,
+				9155C93C1649FD65000034EC /* Session.m in Sources */,
+				9155C93F1649FD65000034EC /* Project.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		9155C91A1649D91C000034EC /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9155C91B1649D91C000034EC /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		9155C9201649D91D000034EC /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9155C9211649D91D000034EC /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		9155C9261649D91D000034EC /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9155C9271649D91D000034EC /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		9155C92C1649D91D000034EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		9155C92D1649D91D000034EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		9155C92F1649D91D000034EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EasyLog/EasyLog-Prefix.pch";
+				INFOPLIST_FILE = "EasyLog/EasyLog-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		9155C9301649D91D000034EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EasyLog/EasyLog-Prefix.pch";
+				INFOPLIST_FILE = "EasyLog/EasyLog-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9155C9071649D91C000034EC /* Build configuration list for PBXProject "EasyLog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9155C92C1649D91D000034EC /* Debug */,
+				9155C92D1649D91D000034EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9155C92E1649D91D000034EC /* Build configuration list for PBXNativeTarget "EasyLog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9155C92F1649D91D000034EC /* Debug */,
+				9155C9301649D91D000034EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		9155C9291649D91D000034EC /* EasyLog.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				9155C92A1649D91D000034EC /* EasyLog.xcdatamodel */,
+			);
+			currentVersion = 9155C92A1649D91D000034EC /* EasyLog.xcdatamodel */;
+			path = EasyLog.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 9155C9041649D91C000034EC /* Project object */;
+}

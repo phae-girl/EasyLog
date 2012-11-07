@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1811" systemVersion="12C60" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Project" representedClassName="Project" syncable="YES">
+        <attribute name="enableLoging" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
+        <attribute name="logFilePath" optional="YES" attributeType="String" defaultValueString="~/Documents" syncable="YES"/>
+        <attribute name="projectName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="projectTotalTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="projectTotalTimeCounter" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="sessions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Session" inverseName="project" inverseEntity="Session" syncable="YES"/>
+    </entity>
+    <entity name="Session" representedClassName="Session" syncable="YES">
+        <attribute name="endTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="sessionTotalTime" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="startTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="project" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Project" inverseName="sessions" inverseEntity="Project" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Project" positionX="135" positionY="329" width="128" height="133"/>
+        <element name="Session" positionX="439" positionY="417" width="128" height="103"/>
+    </elements>
+</model>

@@ -11,17 +11,24 @@
 #import "Session.h"
 
 
+@class AddProjectController;
 @implementation AppDelegate{
 	Session* session;
 	Project* project;
+
 }
 
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize projectListWindow = _projectListWindow;
+@synthesize nameForNewProject, fileNameForNewProject, pathForNewProject, filePathForNewProject;
+@synthesize enableLogging;
 @synthesize addProjectDialog = _addProjectDialog;
-//@synthesize session;
+
+- (IBAction)selectProject:(id)sender{
+	
+}
 
 - (void)awakeFromNib {
 	statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
@@ -33,7 +40,24 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	project =(Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:[self managedObjectContext]];
+//	project = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:[self managedObjectContext]];
+//	
+//
+	projectList = [NSMutableArray arrayWithArray:[self fetchProjectList]];
+	[projectList insertObject:@"New Project" atIndex:0];
+	[projectList insertObject:[NSMenuItem separatorItem] atIndex:1];
+	
+//	for (NSString *projectName in projectList) {
+//		[menu addItemWithTitle:projectName action:@selector(selectProject:) keyEquivalent:@""];
+//		NSLog(@"%@", projectName);
+//	}
+	
+	if (project.projectName == NULL) {
+		project = [self fetchProject:@"Test"];
+	}
+
+	
+	
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "com.Deepsky.EasyLog" in the user's Application Support directory.
@@ -152,13 +176,13 @@
 }
 
 #pragma mark -
-#pragma mark Start and Stop Logging
+#pragma mark Menu Bar Methods
 
 - (IBAction)startLogging:(id)sender {
 	NSLog(@"Start Logging");
 	session = (Session*)[NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:[self managedObjectContext]];
 	session.startTime = [NSDate date];
-	NSLog(@"Session Start Time: %@", session.startTime);
+	NSLog(@"Logging Project: %@, Start Time: %@",project.projectName, session.startTime);
 }
 
 - (IBAction)stopLogging:(id)sender {
@@ -186,19 +210,76 @@
 	[NSApp activateIgnoringOtherApps:YES];
 	[_projectListWindow makeKeyAndOrderFront:nil];
 }
+#pragma mark -
+#pragma mark Add Project Dialog Methods
 
-- (IBAction)openaddProjectDialog:(id)sender {
+- (IBAction)openAddProjectDialog:(id)sender {
+
+	self.nameForNewProject = @"New Project";
+	self.enableLogging = YES;
+	self.fileNameForNewProject = [self.nameForNewProject stringByAppendingString:@".txt"];
+	self.pathForNewProject = @"~/Documents/";
+	self.filePathForNewProject = [self.pathForNewProject stringByAppendingString:fileNameForNewProject];
+	
+	[self addObserver:self forKeyPath:@"nameForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
+	[self addObserver:self forKeyPath:@"fileNameForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
+	[self addObserver:self forKeyPath:@"pathForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
+
+		
 	[NSApp activateIgnoringOtherApps:YES];
 	[_addProjectDialog makeKeyAndOrderFront:nil];
+}
+
+- (IBAction)saveAndCloseAddProjectDialog:(id)sender {
+	project = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:[self managedObjectContext]];
+	project.projectName = self.nameForNewProject;
+	project.enableLoging = [NSNumber numberWithBool:self.enableLogging];
+	project.projectTotalTimeCounter = 0;
+	project.logFilePath = [self.filePathForNewProject stringByExpandingTildeInPath];
+	NSLog(@"Project pre-save name: %@", project.projectName);
+	[self writeDefaults:project.projectName toKey:@"lastAddedProject"];
+	
+	[self.managedObjectContext insertObject:project];
+	
+	NSError *error = nil;
+	
+	if (![[self managedObjectContext]save:&error]) {
+		NSLog(@"Save Error: %@",error);
+	}
+	[_addProjectDialog orderOut:nil];
+	project = nil;
+	
+	
+}
+
+- (IBAction)cancelAddProjectDialog:(id)sender {
+	[_addProjectDialog orderOut:nil];
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
+						 change:(NSDictionary *)change context:(void *)context {
+	
+	if ([keyPath isEqualToString:@"nameForNewProject"]) {
+		[self setValue:[self.nameForNewProject stringByAppendingString:@".txt"] forKey:@"fileNameForNewProject"];
+	}
+	if ([keyPath isEqualToString:@"fileNameForNewProject"]) {
+		[self setValue:[self.pathForNewProject stringByAppendingString:self.fileNameForNewProject] forKey:@"filePathForNewProject"];
+	}
+	if ([keyPath isEqualToString:@"pathForNewProject"]) {
+		[self setValue:[self.pathForNewProject stringByAppendingString:self.fileNameForNewProject] forKey:@"filePathForNewProject"];
+	}
+	
 }
 
 #pragma mark -
 #pragma mark Select Directory for Log File
 
-//-----------------
-//NSOpenPanel: Displaying a File Open Dialog in OS X 10.7
-//-----------------
 - (IBAction)pickLogFileDirectory:(id)sender {
+	//-----------------
+	//NSOpenPanel: Displaying a File Open Dialog in OS X 10.7
+	//From: http://cyborgdino.com/2012/02/nsopenpanel-displaying-a-file-open-dialog-in-os-x-10-7/
+	//-----------------
+
 	
 	// Loop counter.
 	
@@ -230,11 +311,69 @@
 		
 		for( i = 0; i < [files count]; i++ ) {
 			// Do something with the filename.
-			
-			NSLog(@"File path: %@", [[files objectAtIndex:i] path]);
+			self.pathForNewProject = [[[[files objectAtIndex:i] path] stringByAbbreviatingWithTildeInPath]stringByAppendingString:@"/"];
+			NSLog(@"File path: %@", self.pathForNewProject);
 		}
 	}
 }
+
+#pragma mark -
+#pragma mark Fetch Methods
+
+- (NSArray*) fetchProjectList {
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Project" inManagedObjectContext:[self managedObjectContext]];
+	[fetchRequest setEntity:entity];
+	
+	NSError *error = nil;
+	NSArray *fetchedObjects = [[self managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+	if (fetchedObjects == nil) {
+		NSLog(@"Error: %@",error);
+	}
+	
+	NSMutableArray* projList = [NSMutableArray array];
+	
+	for (Project *p in fetchedObjects) {
+		[projList addObject:p.projectName];
+	}
+	
+	return projList;
+}
+
+- (id) fetchProject:(NSString*)aProject {
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Project" inManagedObjectContext:[self managedObjectContext]];
+	[fetchRequest setEntity:entity];
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"projectName == %@",aProject];
+	[fetchRequest setPredicate:predicate];
+	
+	NSError *error = nil;
+	NSArray *fetchedObjects = [[self managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+	if (fetchedObjects == nil) {
+		NSLog(@"Fetch Error: %@", error);
+	}
+	return [fetchedObjects objectAtIndex:0];
+	
+	
+}
+#pragma mark -
+#pragma mark User Default Convenience Methods
+
+- (void)writeDefaults:(id)value toKey:(NSString*)key  {
+	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setObject:value forKey:key];
+	[defaults synchronize];
+}
+
+- (NSString*)readDefaultsForKey:(NSString*)key {
+	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+	NSString* value = [[NSString alloc] initWithString:[defaults stringForKey:key]];
+	return value;
+}
+
 
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender

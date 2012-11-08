@@ -13,6 +13,7 @@
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
 	NSStatusItem *statusItem;
 	IBOutlet NSMenu *menu;
+	NSMutableArray *projectList;
 	
 }
 
@@ -22,8 +23,9 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-//@property Project *project;
-//@property Session *session;
+@property (weak) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject;
+@property BOOL enableLogging;
+
 
 
 - (IBAction)saveAction:(id)sender;
@@ -32,7 +34,10 @@
 - (IBAction)stopLogging:(id)sender;
 - (IBAction)quitApp:(id)sender;
 - (IBAction)openProjectsList:(id)sender;
-- (IBAction)openaddProjectDialog:(id)sender;
+- (IBAction)openAddProjectDialog:(id)sender;
+- (IBAction)saveAndCloseAddProjectDialog:(id)sender;
+- (IBAction)cancelAddProjectDialog:(id)sender;
+- (IBAction)selectProject:(id)sender;
 
 
 @end

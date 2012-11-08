@@ -317,6 +317,7 @@
 				9155C9301649D91D000034EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

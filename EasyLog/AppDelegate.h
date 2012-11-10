@@ -8,44 +8,48 @@
 
 #import <Cocoa/Cocoa.h>
 
-
-
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
 	NSStatusItem *statusItem;
 	IBOutlet NSMenu *menu;
 	IBOutlet NSMutableArray *projectList;
 	
 }
-
-@property (weak) IBOutlet NSWindow *projectListWindow;
-@property (weak) IBOutlet NSWindow *addProjectDialog;
-@property (unsafe_unretained) IBOutlet NSWindow *selectProjectWindow;
-
-
+#pragma mark -
+#pragma mark Core Data Properties
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+#pragma mark -
+#pragma mark Windows and Dialogs
+@property (weak) IBOutlet NSWindow *projectListWindow;
+@property (weak) IBOutlet NSWindow *addProjectDialog;
+@property (weak) IBOutlet NSWindow *selectProjectWindow;
+#pragma mark -
+#pragma mark Internal
 @property (weak) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject;
 @property BOOL enableLogging;
 
-
-
-
-- (IBAction)saveAction:(id)sender;
-- (IBAction)pickLogFileDirectory:(id)sender;
-
+#pragma mark -
+#pragma mark Menu Bar Methods
 - (IBAction)startLogging:(id)sender;
+- (IBAction)openAddProjectDialog:(id)sender;
+- (IBAction)openSelectProjectDialog:(id)sender;
 - (IBAction)stopLogging:(id)sender;
 - (IBAction)quitApp:(id)sender;
 
+#pragma mark -
+#pragma mark Preferences Dialog Methods
 - (IBAction)openProjectsList:(id)sender;
 
-- (IBAction)openAddProjectDialog:(id)sender;
+#pragma mark -
+#pragma mark Add Project Dialog Methods
 - (IBAction)saveAndCloseAddProjectDialog:(id)sender;
 - (IBAction)cancelAddProjectDialog:(id)sender;
+- (IBAction)pickLogFileDirectory:(id)sender;
 
-- (IBAction)openSelectProjectDialog:(id)sender;
-
+#pragma mark -
+#pragma mark Built in Core Data Methods
+- (IBAction)saveAction:(id)sender;
 
 
 @end

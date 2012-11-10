@@ -15,15 +15,19 @@
 	Session* session;
 	Project* project;
 }
-//Core Data Stuff
+
+#pragma mark -
+#pragma mark Core Data Properties
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
-//Windows and Dialogs
+#pragma mark -
+#pragma mark Windows and Dialogs
 @synthesize projectListWindow = _projectListWindow;
 @synthesize addProjectDialog = _addProjectDialog;
 @synthesize selectProjectWindow = _selectProjectWindow;
-//Internal
+#pragma mark -
+#pragma mark Internal
 @synthesize nameForNewProject, fileNameForNewProject, pathForNewProject, filePathForNewProject;
 @synthesize enableLogging;
 
@@ -85,6 +89,8 @@
 }
 
 - (IBAction)openSelectProjectDialog:(id)sender {
+	[NSApp activateIgnoringOtherApps:YES];
+	[_selectProjectWindow makeKeyAndOrderFront:nil];
 }
 
 - (IBAction)stopLogging:(id)sender {
@@ -110,7 +116,6 @@
 
 #pragma mark -
 #pragma mark Preferences Dialog Methods
-
 - (IBAction)openProjectsList:(id)sender {
 	[NSApp activateIgnoringOtherApps:YES];
 	[_projectListWindow makeKeyAndOrderFront:nil];
@@ -144,7 +149,7 @@
 	[_addProjectDialog orderOut:nil]; 
 }
 
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
 						 change:(NSDictionary *)change context:(void *)context {
 	
 	if ([keyPath isEqualToString:@"nameForNewProject"]) {

@@ -13,12 +13,14 @@
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
 	NSStatusItem *statusItem;
 	IBOutlet NSMenu *menu;
-	NSMutableArray *projectList;
+	IBOutlet NSMutableArray *projectList;
 	
 }
 
 @property (weak) IBOutlet NSWindow *projectListWindow;
 @property (weak) IBOutlet NSWindow *addProjectDialog;
+@property (unsafe_unretained) IBOutlet NSWindow *selectProjectWindow;
+
 
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
@@ -28,16 +30,22 @@
 
 
 
+
 - (IBAction)saveAction:(id)sender;
 - (IBAction)pickLogFileDirectory:(id)sender;
+
 - (IBAction)startLogging:(id)sender;
 - (IBAction)stopLogging:(id)sender;
 - (IBAction)quitApp:(id)sender;
+
 - (IBAction)openProjectsList:(id)sender;
+
 - (IBAction)openAddProjectDialog:(id)sender;
 - (IBAction)saveAndCloseAddProjectDialog:(id)sender;
 - (IBAction)cancelAddProjectDialog:(id)sender;
-- (IBAction)selectProject:(id)sender;
+
+- (IBAction)openSelectProjectDialog:(id)sender;
+
 
 
 @end

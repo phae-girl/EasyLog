@@ -28,8 +28,11 @@
 @synthesize selectProjectWindow = _selectProjectWindow;
 #pragma mark -
 #pragma mark Internal
-@synthesize nameForNewProject, fileNameForNewProject, pathForNewProject, filePathForNewProject;
+@synthesize nameForNewProject, fileNameForNewProject, pathForNewProject, filePathForNewProject, currentProjectName;
 @synthesize enableLogging;
+
+#pragma mark -
+#pragma mark Temporary Methods
 
 #pragma mark -
 #pragma mark Awake and Init
@@ -38,26 +41,19 @@
 	[statusItem setMenu:menu];
 	[statusItem setHighlightMode:YES];
 	[statusItem setImage:[NSImage imageNamed:@"Icon"]];
+	// For use with a window opening from the statusbar icon. Maybe a popover would be better than a menu?
 	//[statusItem setTarget:self];
 	//[statusItem setAction:@selector(openWindow:)];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-//	project = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:[self managedObjectContext]];
-//	
-//
 	projectList = [NSMutableArray arrayWithArray:[self fetchProjectList]];
-	[projectList insertObject:@"New Project" atIndex:0];
-	[projectList insertObject:[NSMenuItem separatorItem] atIndex:1];
-	
-//	for (NSString *projectName in projectList) {
-//		[menu addItemWithTitle:projectName action:@selector(selectProject:) keyEquivalent:@""];
-//		NSLog(@"%@", projectName);
-//	}
+	NSLog(@"%@", projectList);
 	
 	if (project.projectName == NULL) {
-		project = [self fetchProject:@"Holy Fuck!"];
+		project = [self fetchProject:@"My Project"];
+		NSLog(@"Current Project: %@", project.projectName);
 	}
 }
 
@@ -428,4 +424,6 @@
     return NSTerminateNow;
 }
 
+- (IBAction)userDidSelectProject:(id)sender {
+}
 @end

@@ -14,6 +14,11 @@
 	IBOutlet NSMutableArray *projectList;
 	
 }
+
+#pragma mark -
+#pragma mark Temporary Properties
+@property NSString *currentProjectName;
+
 #pragma mark -
 #pragma mark Core Data Properties
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
@@ -28,6 +33,10 @@
 #pragma mark Internal
 @property (weak) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject;
 @property BOOL enableLogging;
+
+#pragma mark -
+#pragma mark Temporary Methods
+- (IBAction)userDidSelectProject:(id)sender;
 
 #pragma mark -
 #pragma mark Menu Bar Methods

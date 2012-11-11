@@ -44,6 +44,7 @@
 - (IBAction)userSelectedCancelFromSelectProjectDialog:(id)sender;
 - (IBAction)userSelectedAddProjectFromProjectDialog:(id)sender;
 
+
 #pragma mark -
 #pragma mark Menu Bar Methods
 - (IBAction)userSelectedStartLoggingFromMenuBar:(id)sender;

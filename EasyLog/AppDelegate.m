@@ -65,7 +65,6 @@
 	}
 	if (project.projectName == NULL) {
 		project = [self fetchProject:currentProjectName];
-		
 	}
 }
 
@@ -111,9 +110,6 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	
-	//projectList = [NSMutableArray arrayWithArray:[self fetchProjectList]];
-	
 }
 
 
@@ -140,6 +136,7 @@
 		session.endTime = [NSDate date];
 		session.sessionTotalTime = [NSNumber numberWithInt:[session.endTime timeIntervalSinceDate:session.startTime]];
 		project.projectTotalTimeCounter = [NSNumber numberWithInt:[project.projectTotalTimeCounter intValue] + [session.sessionTotalTime intValue]];
+		project.projectTotalTime = [self nicelyFormattedTimeStringFrom:[project.projectTotalTimeCounter intValue]];
 		[self saveAction:nil];
 		
 		

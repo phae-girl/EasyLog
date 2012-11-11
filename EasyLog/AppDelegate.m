@@ -10,29 +10,76 @@
 #import "Project.h"
 #import "Session.h"
 
+@implementation NSDate (FormattedStrings)
+- (NSString *)timeString
+{
+    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+    [timeFormatter setDateFormat:@"HH:mm:ss"];
+    return [timeFormatter stringFromDate:self];
+}
+
+- (NSString *)dateString
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MMM-dd"];
+    return [dateFormatter stringFromDate:self];
+}
+
+@end
+
+
 @implementation AppDelegate
 {
 	Session* session;
 	Project* project;
 }
+#pragma mark -
+#pragma mark Temporary Properties
+@synthesize currentProjectName;
 
 #pragma mark -
 #pragma mark Core Data Properties
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
+
 #pragma mark -
 #pragma mark Windows and Dialogs
 @synthesize projectListWindow = _projectListWindow;
 @synthesize addProjectDialog = _addProjectDialog;
 @synthesize selectProjectWindow = _selectProjectWindow;
+
 #pragma mark -
 #pragma mark Internal
-@synthesize nameForNewProject, fileNameForNewProject, pathForNewProject, filePathForNewProject, currentProjectName;
+@synthesize nameForNewProject, fileNameForNewProject, pathForNewProject, filePathForNewProject;
 @synthesize enableLogging;
 
 #pragma mark -
 #pragma mark Temporary Methods
+
+- (IBAction)userDidSelectProject:(id)sender {
+	if (project.projectName != NULL) {
+		[self saveAction:nil];
+		project = nil;
+	}
+	if (project.projectName == NULL) {
+		project = [self fetchProject:currentProjectName];
+		NSLog(@"Current Project: %@", project.projectName);
+	}
+}
+
+- (IBAction)userSelectedStartFromSelectProjectDialog:(id)sender {
+	[self userSelectedStartLoggingFromMenuBar:nil];
+	[_selectProjectWindow orderOut:nil];
+}
+
+- (IBAction)userSelectedCancelFromSelectProjectDialog:(id)sender {
+	[_selectProjectWindow orderOut:nil];
+}
+- (IBAction)userSelectedAddProjectFromProjectDialog:(id)sender {
+	[self userSelectedAddProjectFromMenuBar:nil];
+	[_selectProjectWindow orderOut:nil];
+}
 
 #pragma mark -
 #pragma mark Awake and Init
@@ -41,6 +88,7 @@
 	[statusItem setMenu:menu];
 	[statusItem setHighlightMode:YES];
 	[statusItem setImage:[NSImage imageNamed:@"Icon"]];
+	currentProjectName = @"Select a Project...";
 	// For use with a window opening from the statusbar icon. Maybe a popover would be better than a menu?
 	//[statusItem setTarget:self];
 	//[statusItem setAction:@selector(openWindow:)];
@@ -48,26 +96,49 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	projectList = [NSMutableArray arrayWithArray:[self fetchProjectList]];
-	NSLog(@"%@", projectList);
-	
-	if (project.projectName == NULL) {
-		project = [self fetchProject:@"My Project"];
-		NSLog(@"Current Project: %@", project.projectName);
-	}
+	//projectList = [NSMutableArray arrayWithArray:[self fetchProjectList]];
+	//NSLog(@"%@", projectList);
 }
 
 
 #pragma mark -
 #pragma mark Menu Bar Methods
-- (IBAction)startLogging:(id)sender {
-	NSLog(@"Start Logging");
-	session = (Session*)[NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:[self managedObjectContext]];
-	session.startTime = [NSDate date];
-	NSLog(@"Logging Project: %@, Start Time: %@",project.projectName, session.startTime);
+- (IBAction)userSelectedStartLoggingFromMenuBar:(id)sender {
+	if (project == NULL) {
+		[self userSelectedSelectProjectFromMenuBar:nil];
+	}
+	else {
+		session = (Session*)[NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:[self managedObjectContext]];
+		session.startTime = [NSDate date];
+		NSLog(@"Logging Project: %@, Start Time: %@ Logging Enabled: %@",project.projectName, session.startTime, project.enableLoging);
+	}
+	[self saveAction:nil];
 }
-
-- (IBAction)openAddProjectDialog:(id)sender {
+- (IBAction)userSelectedStopLoggingFromMenuBar:(id)sender {
+	NSLog(@"Logging Project: %@, Start Time: %@ Logging Enabled: %@",project.projectName, session.startTime, project.enableLoging);
+	NSLog(@"Stop Logging");
+	
+	if (session) {
+		session.endTime = [NSDate date];
+		session.sessionTotalTime = [NSNumber numberWithInt:[session.endTime timeIntervalSinceDate:session.startTime]];
+		project.projectTotalTimeCounter = [NSNumber numberWithInt:[project.projectTotalTimeCounter intValue] + [session.sessionTotalTime intValue]];
+		[self saveAction:nil];
+		
+		
+		if ([project.enableLoging boolValue]) {
+			NSLog(@"Do log file stuff");
+			[self logSession];
+		}
+		else {
+			NSLog(@"Don't do log file stuff");
+		}
+		NSLog(@"Total Session Time %@",session.sessionTotalTime);
+		NSLog(@"Total Project Time %@",project.projectTotalTimeCounter);
+		
+	}
+	session = nil;
+}
+- (IBAction)userSelectedAddProjectFromMenuBar:(id)sender {
 	
 	self.nameForNewProject = @"New Project";
 	self.enableLogging = YES;
@@ -83,24 +154,11 @@
 	[NSApp activateIgnoringOtherApps:YES];
 	[_addProjectDialog makeKeyAndOrderFront:nil];
 }
-
-- (IBAction)openSelectProjectDialog:(id)sender {
+- (IBAction)userSelectedSelectProjectFromMenuBar:(id)sender {
 	[NSApp activateIgnoringOtherApps:YES];
 	[_selectProjectWindow makeKeyAndOrderFront:nil];
 }
-
-- (IBAction)stopLogging:(id)sender {
-	NSLog(@"Stop Logging");
-	
-	if (session) {
-		session.endTime = [NSDate date];
-		session.sessionTotalTime = [NSNumber numberWithInt:[session.endTime timeIntervalSinceDate:session.startTime]];
-		NSLog(@"Total Session Time %@",session.sessionTotalTime);
-		
-	}
-}
-
-- (IBAction)quitApp:(id)sender {
+- (IBAction)userSelectedQuitAppFromMenuBar:(id)sender {
 	NSError *error = nil;
 	
 	if (![[self managedObjectContext]save:&error]) {
@@ -140,26 +198,9 @@
 	
 	
 }
-
 - (IBAction)cancelAddProjectDialog:(id)sender {
 	[_addProjectDialog orderOut:nil]; 
 }
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
-						 change:(NSDictionary *)change context:(void *)context {
-	
-	if ([keyPath isEqualToString:@"nameForNewProject"]) {
-		[self setValue:[self.nameForNewProject stringByAppendingString:@".txt"] forKey:@"fileNameForNewProject"];
-	}
-	if ([keyPath isEqualToString:@"fileNameForNewProject"]) {
-		[self setValue:[self.pathForNewProject stringByAppendingString:self.fileNameForNewProject] forKey:@"filePathForNewProject"];
-	}
-	if ([keyPath isEqualToString:@"pathForNewProject"]) {
-		[self setValue:[self.pathForNewProject stringByAppendingString:self.fileNameForNewProject] forKey:@"filePathForNewProject"];
-	}
-	
-}
-
 - (IBAction)pickLogFileDirectory:(id)sender {
 	//-----------------
 	//NSOpenPanel: Displaying a File Open Dialog in OS X 10.7
@@ -202,6 +243,20 @@
 		}
 	}
 }
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
+						change:(NSDictionary *)change context:(void *)context {
+	
+	if ([keyPath isEqualToString:@"nameForNewProject"]) {
+		[self setValue:[self.nameForNewProject stringByAppendingString:@".txt"] forKey:@"fileNameForNewProject"];
+	}
+	if ([keyPath isEqualToString:@"fileNameForNewProject"]) {
+		[self setValue:[self.pathForNewProject stringByAppendingString:self.fileNameForNewProject] forKey:@"filePathForNewProject"];
+	}
+	if ([keyPath isEqualToString:@"pathForNewProject"]) {
+		[self setValue:[self.pathForNewProject stringByAppendingString:self.fileNameForNewProject] forKey:@"filePathForNewProject"];
+	}
+	
+}
 
 #pragma mark -
 #pragma mark Fetch Methods
@@ -225,7 +280,6 @@
 	
 	return projList;
 }
-
 - (id) fetchProject:(NSString*)aProject {
 	
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -252,11 +306,55 @@
 	[defaults setObject:value forKey:key];
 	[defaults synchronize];
 }
-
 - (NSString*)readDefaultsForKey:(NSString*)key {
 	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 	NSString* value = [[NSString alloc] initWithString:[defaults stringForKey:key]];
 	return value;
+}
+
+#pragma mark -
+#pragma mark Format Time String Method
+
+- (NSString*)nicelyFormattedTimeStringFrom:(int)aNumberOfSeconds {
+	
+	int hours = aNumberOfSeconds / 3600,remainder = aNumberOfSeconds % 3600,minutes = remainder / 60,seconds = remainder % 60;
+	
+	NSMutableArray* sessionLength = [NSMutableArray array];
+	
+	if (hours > 0) {
+		[sessionLength addObject:[NSString stringWithFormat:@"%u", hours]], [sessionLength addObject:@" hours, "];
+		[sessionLength addObject:[NSString stringWithFormat:@"%u", minutes]], [sessionLength addObject:@" minutes, and "];
+		[sessionLength addObject:[NSString stringWithFormat:@"%u", seconds]], [sessionLength addObject:@" seconds"];
+	}
+	else if (minutes >0) {
+		[sessionLength addObject:[NSString stringWithFormat:@"%u", minutes]], [sessionLength addObject:@" minutes, and "];
+		[sessionLength addObject:[NSString stringWithFormat:@"%u", seconds]], [sessionLength addObject:@" seconds"];
+	}
+	else {
+		[sessionLength addObject:[NSString stringWithFormat:@"%u", seconds]], [sessionLength addObject:@" seconds"];
+	}
+	return [sessionLength componentsJoinedByString:@""];
+}
+
+#pragma mark -
+#pragma mark Log Session Method
+
+- (void)logSession {
+	NSString* logString = [[NSArray arrayWithObjects:[[NSDate date] dateString],@"Session Start:",[session.startTime timeString],
+							@"Session End:",[session.endTime timeString],@"Session Total:",[self nicelyFormattedTimeStringFrom:[session.sessionTotalTime intValue]],@"Project Total:",[self nicelyFormattedTimeStringFrom:[project.projectTotalTimeCounter intValue]],@"\n",nil] componentsJoinedByString:@" "];
+	NSLog(@"%@", logString);
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	
+	if (![fileManager fileExistsAtPath:	project.logFilePath]) {
+		[fileManager createFileAtPath: project.logFilePath contents:[logString dataUsingEncoding:NSUTF8StringEncoding]attributes:nil];
+	}
+	
+	else {
+		NSFileHandle *fout = [NSFileHandle fileHandleForUpdatingAtPath:project.logFilePath];
+		[fout seekToEndOfFile];
+		[fout writeData:[logString dataUsingEncoding:NSUTF8StringEncoding]];
+		[fout closeFile];
+	}
 }
 
 #pragma mark -
@@ -424,6 +522,4 @@
     return NSTerminateNow;
 }
 
-- (IBAction)userDidSelectProject:(id)sender {
-}
 @end

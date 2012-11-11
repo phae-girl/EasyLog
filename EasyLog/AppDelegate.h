@@ -24,11 +24,13 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 #pragma mark -
 #pragma mark Windows and Dialogs
 @property (weak) IBOutlet NSWindow *projectListWindow;
 @property (weak) IBOutlet NSWindow *addProjectDialog;
 @property (weak) IBOutlet NSWindow *selectProjectWindow;
+
 #pragma mark -
 #pragma mark Internal
 @property (weak) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject;
@@ -37,14 +39,17 @@
 #pragma mark -
 #pragma mark Temporary Methods
 - (IBAction)userDidSelectProject:(id)sender;
+- (IBAction)userSelectedStartFromSelectProjectDialog:(id)sender;
+- (IBAction)userSelectedCancelFromSelectProjectDialog:(id)sender;
+- (IBAction)userSelectedAddProjectFromProjectDialog:(id)sender;
 
 #pragma mark -
 #pragma mark Menu Bar Methods
-- (IBAction)startLogging:(id)sender;
-- (IBAction)openAddProjectDialog:(id)sender;
-- (IBAction)openSelectProjectDialog:(id)sender;
-- (IBAction)stopLogging:(id)sender;
-- (IBAction)quitApp:(id)sender;
+- (IBAction)userSelectedStartLoggingFromMenuBar:(id)sender;
+- (IBAction)userSelectedStopLoggingFromMenuBar:(id)sender;
+- (IBAction)userSelectedAddProjectFromMenuBar:(id)sender;
+- (IBAction)userSelectedSelectProjectFromMenuBar:(id)sender;
+- (IBAction)userSelectedQuitAppFromMenuBar:(id)sender;
 
 #pragma mark -
 #pragma mark Preferences Dialog Methods

@@ -37,6 +37,7 @@
 #pragma mark Temporary Properties
 @synthesize currentProjectName;
 
+
 #pragma mark -
 #pragma mark Core Data Properties
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -64,7 +65,7 @@
 	}
 	if (project.projectName == NULL) {
 		project = [self fetchProject:currentProjectName];
-		NSLog(@"Current Project: %@", project.projectName);
+		
 	}
 }
 
@@ -84,10 +85,24 @@
 #pragma mark -
 #pragma mark Awake and Init
 - (void)awakeFromNib {
+	
 	statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
 	[statusItem setMenu:menu];
 	[statusItem setHighlightMode:YES];
 	[statusItem setImage:[NSImage imageNamed:@"Icon"]];
+	[menu setAutoenablesItems:NO];
+	
+	startMenuItem = [[NSMenuItem alloc]initWithTitle:@"Start Tracking" action:@selector(userSelectedStartLoggingFromMenuBar:) keyEquivalent:@""];
+	stopMenuItem = [[NSMenuItem alloc]initWithTitle:@"Stop Tracking" action:@selector(userSelectedStopLoggingFromMenuBar:) keyEquivalent:@""];
+	[startMenuItem setEnabled:YES];
+	[stopMenuItem setEnabled:NO];
+	
+	
+	
+	[menu insertItem:startMenuItem atIndex:0];
+	[menu insertItem:stopMenuItem atIndex:1];
+	
+	
 	currentProjectName = @"Select a Project...";
 	// For use with a window opening from the statusbar icon. Maybe a popover would be better than a menu?
 	//[statusItem setTarget:self];
@@ -96,8 +111,9 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+	
 	//projectList = [NSMutableArray arrayWithArray:[self fetchProjectList]];
-	//NSLog(@"%@", projectList);
+	
 }
 
 
@@ -108,16 +124,18 @@
 		[self userSelectedSelectProjectFromMenuBar:nil];
 	}
 	else {
+		[startMenuItem setTitle:[NSString stringWithFormat: @"Tracking: %@", project.projectName]];
+		[startMenuItem setEnabled:NO];
+		[stopMenuItem setEnabled:YES];
+		
 		session = (Session*)[NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:[self managedObjectContext]];
 		session.startTime = [NSDate date];
-		NSLog(@"Logging Project: %@, Start Time: %@ Logging Enabled: %@",project.projectName, session.startTime, project.enableLoging);
+		
 	}
 	[self saveAction:nil];
 }
 - (IBAction)userSelectedStopLoggingFromMenuBar:(id)sender {
-	NSLog(@"Logging Project: %@, Start Time: %@ Logging Enabled: %@",project.projectName, session.startTime, project.enableLoging);
-	NSLog(@"Stop Logging");
-	
+		
 	if (session) {
 		session.endTime = [NSDate date];
 		session.sessionTotalTime = [NSNumber numberWithInt:[session.endTime timeIntervalSinceDate:session.startTime]];
@@ -126,16 +144,14 @@
 		
 		
 		if ([project.enableLoging boolValue]) {
-			NSLog(@"Do log file stuff");
+			
 			[self logSession];
 		}
-		else {
-			NSLog(@"Don't do log file stuff");
-		}
-		NSLog(@"Total Session Time %@",session.sessionTotalTime);
-		NSLog(@"Total Project Time %@",project.projectTotalTimeCounter);
-		
 	}
+	[startMenuItem setEnabled:YES];
+	[stopMenuItem setEnabled:NO];
+	[startMenuItem setTitle:[NSString stringWithFormat: @"Resume %@", project.projectName]];
+	
 	session = nil;
 }
 - (IBAction)userSelectedAddProjectFromMenuBar:(id)sender {
@@ -183,7 +199,7 @@
 	project.enableLoging = [NSNumber numberWithBool:self.enableLogging];
 	project.projectTotalTimeCounter = 0;
 	project.logFilePath = [self.filePathForNewProject stringByExpandingTildeInPath];
-	NSLog(@"Project pre-save name: %@", project.projectName);
+	
 	[self writeDefaults:project.projectName toKey:@"lastAddedProject"];
 	
 	[self.managedObjectContext insertObject:project];
@@ -239,7 +255,7 @@
 		for( i = 0; i < [files count]; i++ ) {
 			// Do something with the filename.
 			self.pathForNewProject = [[[[files objectAtIndex:i] path] stringByAbbreviatingWithTildeInPath]stringByAppendingString:@"/"];
-			NSLog(@"File path: %@", self.pathForNewProject);
+			
 		}
 	}
 }
@@ -342,7 +358,7 @@
 - (void)logSession {
 	NSString* logString = [[NSArray arrayWithObjects:[[NSDate date] dateString],@"Session Start:",[session.startTime timeString],
 							@"Session End:",[session.endTime timeString],@"Session Total:",[self nicelyFormattedTimeStringFrom:[session.sessionTotalTime intValue]],@"Project Total:",[self nicelyFormattedTimeStringFrom:[project.projectTotalTimeCounter intValue]],@"\n",nil] componentsJoinedByString:@" "];
-	NSLog(@"%@", logString);
+	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	
 	if (![fileManager fileExistsAtPath:	project.logFilePath]) {

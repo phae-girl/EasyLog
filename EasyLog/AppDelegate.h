@@ -11,13 +11,14 @@
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
 	NSStatusItem *statusItem;
 	IBOutlet NSMenu *menu;
-	IBOutlet NSMutableArray *projectList;
+	NSMenuItem *startMenuItem, *stopMenuItem;
 	
 }
 
 #pragma mark -
 #pragma mark Temporary Properties
 @property NSString *currentProjectName;
+
 
 #pragma mark -
 #pragma mark Core Data Properties

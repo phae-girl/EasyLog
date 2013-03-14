@@ -14,6 +14,7 @@
 @property (copy) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject, *currentProjectName;
 @property BOOL enableLogging;
 @property Session* session;
+@property Project* project;
 @end
 
 @implementation NSDate (FormattedStrings)
@@ -34,10 +35,6 @@
 @end
 
 @implementation AppDelegate
-{
-	
-	Project* project;
-}
 
 #pragma mark -
 #pragma mark Core Data Properties
@@ -55,12 +52,12 @@
 #pragma mark Temporary Methods
 
 - (IBAction)userDidSelectProject:(id)sender {
-	if (project.projectName != NULL) {
+	if (self.project.projectName != NULL) {
 		[self saveAction:nil];
-		project = nil;
+		self.project = nil;
 	}
-	if (project.projectName == NULL) {
-		project = [self fetchProject:self.currentProjectName];
+	if (self.project.projectName == NULL) {
+		self.project = [self fetchProject:self.currentProjectName];
 	}
 }
 
@@ -112,11 +109,11 @@
 #pragma mark -
 #pragma mark Menu Bar Methods
 - (IBAction)userSelectedStartLoggingFromMenuBar:(id)sender {
-	if (project == NULL) {
+	if (self.project == NULL) {
 		[self userSelectedSelectProjectFromMenuBar:nil];
 	}
 	else {
-		[startMenuItem setTitle:[NSString stringWithFormat: @"Tracking: %@", project.projectName]];
+		[startMenuItem setTitle:[NSString stringWithFormat: @"Tracking: %@", self.project.projectName]];
 		[startMenuItem setEnabled:NO];
 		[stopMenuItem setEnabled:YES];
 		
@@ -131,19 +128,19 @@
 	if (self.session) {
 		self.session.endTime = [NSDate date];
 		self.session.sessionTotalTime = [NSNumber numberWithInt:[self.session.endTime timeIntervalSinceDate:self.session.startTime]];
-		project.projectTotalTimeCounter = @([project.projectTotalTimeCounter intValue] + [self.session.sessionTotalTime intValue]);
-		project.projectTotalTime = [self nicelyFormattedTimeStringFrom:[project.projectTotalTimeCounter intValue]];
+		self.project.projectTotalTimeCounter = @([self.project.projectTotalTimeCounter intValue] + [self.session.sessionTotalTime intValue]);
+		self.project.projectTotalTime = [self nicelyFormattedTimeStringFrom:[self.project.projectTotalTimeCounter intValue]];
 		[self saveAction:nil];
 		
 		
-		if ([project.enableLoging boolValue]) {
+		if ([self.project.enableLoging boolValue]) {
 			
 			[self logSession];
 		}
 	}
 	[startMenuItem setEnabled:YES];
 	[stopMenuItem setEnabled:NO];
-	[startMenuItem setTitle:[NSString stringWithFormat: @"Resume %@", project.projectName]];
+	[startMenuItem setTitle:[NSString stringWithFormat: @"Resume %@", self.project.projectName]];
 	
 	_session = nil;
 }
@@ -187,15 +184,15 @@
 #pragma mark -
 #pragma mark Add Project Dialog Methods
 - (IBAction)saveAndCloseAddProjectDialog:(id)sender {
-	project = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:[self managedObjectContext]];
-	project.projectName = self.nameForNewProject;
-	project.enableLoging = @(self.enableLogging);
-	project.projectTotalTimeCounter = 0;
-	project.logFilePath = [self.filePathForNewProject stringByExpandingTildeInPath];
+	self.project = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:[self managedObjectContext]];
+	self.project.projectName = self.nameForNewProject;
+	self.project.enableLoging = @(self.enableLogging);
+	self.project.projectTotalTimeCounter = 0;
+	self.project.logFilePath = [self.filePathForNewProject stringByExpandingTildeInPath];
 	
-	[self writeDefaults:project.projectName toKey:@"lastAddedProject"];
+	[self writeDefaults:self.project.projectName toKey:@"lastAddedProject"];
 	
-	[self.managedObjectContext insertObject:project];
+	[self.managedObjectContext insertObject:self.project];
 	
 	NSError *error = nil;
 	
@@ -203,7 +200,7 @@
 		NSLog(@"Save Error: %@",error);
 	}
 	[_addProjectDialog orderOut:nil];
-	project = nil;
+	self.project = nil;
 	
 	
 }
@@ -350,16 +347,16 @@
 
 - (void)logSession {
 	NSString* logString = [@[[[NSDate date] dateString],@"Session Start:",[self.session.startTime timeString],
-							@"Session End:",[self.session.endTime timeString],@"Session Total:",[self nicelyFormattedTimeStringFrom:[self.session.sessionTotalTime intValue]],@"Project Total:",[self nicelyFormattedTimeStringFrom:[project.projectTotalTimeCounter intValue]],@"\n"] componentsJoinedByString:@" "];
+							@"Session End:",[self.session.endTime timeString],@"Session Total:",[self nicelyFormattedTimeStringFrom:[self.session.sessionTotalTime intValue]],@"Project Total:",[self nicelyFormattedTimeStringFrom:[self.project.projectTotalTimeCounter intValue]],@"\n"] componentsJoinedByString:@" "];
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	
-	if (![fileManager fileExistsAtPath:	project.logFilePath]) {
-		[fileManager createFileAtPath: project.logFilePath contents:[logString dataUsingEncoding:NSUTF8StringEncoding]attributes:nil];
+	if (![fileManager fileExistsAtPath:	self.project.logFilePath]) {
+		[fileManager createFileAtPath: self.project.logFilePath contents:[logString dataUsingEncoding:NSUTF8StringEncoding]attributes:nil];
 	}
 	
 	else {
-		NSFileHandle *fout = [NSFileHandle fileHandleForUpdatingAtPath:project.logFilePath];
+		NSFileHandle *fout = [NSFileHandle fileHandleForUpdatingAtPath:self.project.logFilePath];
 		[fout seekToEndOfFile];
 		[fout writeData:[logString dataUsingEncoding:NSUTF8StringEncoding]];
 		[fout closeFile];

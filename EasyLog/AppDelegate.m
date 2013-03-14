@@ -43,12 +43,6 @@
 @synthesize managedObjectContext = _managedObjectContext;
 
 #pragma mark -
-#pragma mark Windows and Dialogs
-@synthesize projectListWindow = _projectListWindow;
-@synthesize addProjectDialog = _addProjectDialog;
-@synthesize selectProjectWindow = _selectProjectWindow;
-
-#pragma mark -
 #pragma mark Temporary Methods
 
 - (IBAction)userDidSelectProject:(id)sender {
@@ -63,15 +57,15 @@
 
 - (IBAction)userSelectedStartFromSelectProjectDialog:(id)sender {
 	[self userSelectedStartLoggingFromMenuBar:nil];
-	[_selectProjectWindow orderOut:nil];
+	[self.selectProjectWindow orderOut:nil];
 }
 
 - (IBAction)userSelectedCancelFromSelectProjectDialog:(id)sender {
-	[_selectProjectWindow orderOut:nil];
+	[self.selectProjectWindow orderOut:nil];
 }
 - (IBAction)userSelectedAddProjectFromProjectDialog:(id)sender {
 	[self userSelectedAddProjectFromMenuBar:nil];
-	[_selectProjectWindow orderOut:nil];
+	[self.selectProjectWindow orderOut:nil];
 }
 
 #pragma mark -
@@ -158,11 +152,11 @@
 	
 	
 	[NSApp activateIgnoringOtherApps:YES];
-	[_addProjectDialog makeKeyAndOrderFront:nil];
+	[self.addProjectDialog makeKeyAndOrderFront:nil];
 }
 - (IBAction)userSelectedSelectProjectFromMenuBar:(id)sender {
 	[NSApp activateIgnoringOtherApps:YES];
-	[_selectProjectWindow makeKeyAndOrderFront:nil];
+	[self.selectProjectWindow makeKeyAndOrderFront:nil];
 }
 - (IBAction)userSelectedQuitAppFromMenuBar:(id)sender {
 	NSError *error = nil;
@@ -178,7 +172,7 @@
 #pragma mark Preferences Dialog Methods
 - (IBAction)openProjectsList:(id)sender {
 	[NSApp activateIgnoringOtherApps:YES];
-	[_projectListWindow makeKeyAndOrderFront:nil];
+	[self.projectListWindow makeKeyAndOrderFront:nil];
 }
 
 #pragma mark -
@@ -199,13 +193,13 @@
 	if (![[self managedObjectContext]save:&error]) {
 		NSLog(@"Save Error: %@",error);
 	}
-	[_addProjectDialog orderOut:nil];
+	[self.addProjectDialog orderOut:nil];
 	self.project = nil;
 	
 	
 }
 - (IBAction)cancelAddProjectDialog:(id)sender {
-	[_addProjectDialog orderOut:nil]; 
+	[self.addProjectDialog orderOut:nil]; 
 }
 - (IBAction)pickLogFileDirectory:(id)sender {
 	//-----------------

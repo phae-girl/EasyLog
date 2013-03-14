@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
-	IBOutlet NSMenu *menu;
+	
 	NSMenuItem *startMenuItem, *stopMenuItem;
 	NSStatusItem *statusItem;
 
@@ -23,6 +23,7 @@
 
 #pragma mark -
 #pragma mark Windows and Dialogs
+@property (weak) IBOutlet NSMenu *menu;
 @property (weak) IBOutlet NSWindow *addProjectDialog;
 @property (weak) IBOutlet NSWindow *projectListWindow;
 @property (weak) IBOutlet NSWindow *selectProjectWindow;

@@ -75,18 +75,18 @@
 {
 	
 	statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
-	[statusItem setMenu:menu];
+	[statusItem setMenu:self.menu];
 	[statusItem setHighlightMode:YES];
 	[statusItem setImage:[NSImage imageNamed:@"Icon"]];
-	[menu setAutoenablesItems:NO];
+	[self.menu setAutoenablesItems:NO];
 	
 	startMenuItem = [[NSMenuItem alloc]initWithTitle:@"Start Tracking" action:@selector(userSelectedStartLoggingFromMenuBar:) keyEquivalent:@""];
 	stopMenuItem = [[NSMenuItem alloc]initWithTitle:@"Stop Tracking" action:@selector(userSelectedStopLoggingFromMenuBar:) keyEquivalent:@""];
 	[startMenuItem setEnabled:YES];
 	[stopMenuItem setEnabled:NO];
 	
-	[menu insertItem:startMenuItem atIndex:0];
-	[menu insertItem:stopMenuItem atIndex:1];
+	[self.menu insertItem:startMenuItem atIndex:0];
+	[self.menu insertItem:stopMenuItem atIndex:1];
 	
 	self.currentProjectName = @"Select a Project...";
 	// For use with a window opening from the statusbar icon. Maybe a popover would be better than a menu?

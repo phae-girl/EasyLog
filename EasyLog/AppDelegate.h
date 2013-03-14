@@ -9,10 +9,10 @@
 #import <Cocoa/Cocoa.h>
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
-	NSStatusItem *statusItem;
 	IBOutlet NSMenu *menu;
 	NSMenuItem *startMenuItem, *stopMenuItem;
-	
+	NSStatusItem *statusItem;
+
 }
 
 #pragma mark -
@@ -21,7 +21,6 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-
 #pragma mark -
 #pragma mark Windows and Dialogs
 @property (weak) IBOutlet NSWindow *addProjectDialog;
@@ -29,13 +28,11 @@
 @property (weak) IBOutlet NSWindow *selectProjectWindow;
 
 #pragma mark -
-#pragma mark Temporary Methods
+#pragma mark Project Dialog Methods
 - (IBAction)userDidSelectProject:(id)sender;
 - (IBAction)userSelectedAddProjectFromProjectDialog:(id)sender;
 - (IBAction)userSelectedCancelFromSelectProjectDialog:(id)sender;
 - (IBAction)userSelectedStartFromSelectProjectDialog:(id)sender;
-
-
 
 #pragma mark -
 #pragma mark Menu Bar Methods
@@ -44,7 +41,6 @@
 - (IBAction)userSelectedSelectProjectFromMenuBar:(id)sender;
 - (IBAction)userSelectedStartLoggingFromMenuBar:(id)sender;
 - (IBAction)userSelectedStopLoggingFromMenuBar:(id)sender;
-
 
 #pragma mark -
 #pragma mark Preferences Dialog Methods
@@ -56,10 +52,8 @@
 - (IBAction)pickLogFileDirectory:(id)sender;
 - (IBAction)saveAndCloseAddProjectDialog:(id)sender;
 
-
 #pragma mark -
 #pragma mark Built in Core Data Methods
 - (IBAction)saveAction:(id)sender;
-
 
 @end

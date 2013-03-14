@@ -13,8 +13,9 @@
 @interface AppDelegate ()
 @property (copy) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject, *currentProjectName;
 @property BOOL enableLogging;
-@property Session* session;
 @property Project* project;
+@property Session* session;
+
 @end
 
 @implementation NSDate (FormattedStrings)
@@ -43,9 +44,9 @@
 @synthesize managedObjectContext = _managedObjectContext;
 
 #pragma mark -
-#pragma mark Temporary Methods
-
-- (IBAction)userDidSelectProject:(id)sender {
+#pragma mark Project Dialog Methods
+- (IBAction)userDidSelectProject:(id)sender
+{
 	if (self.project.projectName != NULL) {
 		[self saveAction:nil];
 		self.project = nil;
@@ -70,7 +71,8 @@
 
 #pragma mark -
 #pragma mark Awake and Init
-- (void)awakeFromNib {
+- (void)awakeFromNib
+{
 	
 	statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
 	[statusItem setMenu:menu];
@@ -83,11 +85,8 @@
 	[startMenuItem setEnabled:YES];
 	[stopMenuItem setEnabled:NO];
 	
-	
-	
 	[menu insertItem:startMenuItem atIndex:0];
 	[menu insertItem:stopMenuItem atIndex:1];
-	
 	
 	self.currentProjectName = @"Select a Project...";
 	// For use with a window opening from the statusbar icon. Maybe a popover would be better than a menu?
@@ -95,14 +94,11 @@
 	//[statusItem setAction:@selector(openWindow:)];
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
-}
-
-
 #pragma mark -
 #pragma mark Menu Bar Methods
-- (IBAction)userSelectedStartLoggingFromMenuBar:(id)sender {
+- (IBAction)userSelectedStartLoggingFromMenuBar:(id)sender
+{
+
 	if (self.project == NULL) {
 		[self userSelectedSelectProjectFromMenuBar:nil];
 	}
@@ -113,11 +109,11 @@
 		
 		self.session = (Session*)[NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:[self managedObjectContext]];
 		self.session.startTime = [NSDate date];
-		
-	}
+		}
 	[self saveAction:nil];
 }
-- (IBAction)userSelectedStopLoggingFromMenuBar:(id)sender {
+- (IBAction)userSelectedStopLoggingFromMenuBar:(id)sender
+{
 		
 	if (self.session) {
 		self.session.endTime = [NSDate date];
@@ -126,9 +122,7 @@
 		self.project.projectTotalTime = [self nicelyFormattedTimeStringFrom:[self.project.projectTotalTimeCounter intValue]];
 		[self saveAction:nil];
 		
-		
 		if ([self.project.enableLoging boolValue]) {
-			
 			[self logSession];
 		}
 	}
@@ -138,7 +132,8 @@
 	
 	_session = nil;
 }
-- (IBAction)userSelectedAddProjectFromMenuBar:(id)sender {
+- (IBAction)userSelectedAddProjectFromMenuBar:(id)sender
+{
 	
 	self.nameForNewProject = @"New Project";
 	self.enableLogging = YES;
@@ -150,15 +145,17 @@
 	[self addObserver:self forKeyPath:@"fileNameForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
 	[self addObserver:self forKeyPath:@"pathForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
 	
-	
 	[NSApp activateIgnoringOtherApps:YES];
 	[self.addProjectDialog makeKeyAndOrderFront:nil];
 }
 - (IBAction)userSelectedSelectProjectFromMenuBar:(id)sender {
+
 	[NSApp activateIgnoringOtherApps:YES];
 	[self.selectProjectWindow makeKeyAndOrderFront:nil];
 }
+
 - (IBAction)userSelectedQuitAppFromMenuBar:(id)sender {
+
 	NSError *error = nil;
 	
 	if (![[self managedObjectContext]save:&error]) {
@@ -170,14 +167,17 @@
 
 #pragma mark -
 #pragma mark Preferences Dialog Methods
-- (IBAction)openProjectsList:(id)sender {
+- (IBAction)openProjectsList:(id)sender
+{
+
 	[NSApp activateIgnoringOtherApps:YES];
 	[self.projectListWindow makeKeyAndOrderFront:nil];
 }
 
 #pragma mark -
 #pragma mark Add Project Dialog Methods
-- (IBAction)saveAndCloseAddProjectDialog:(id)sender {
+- (IBAction)saveAndCloseAddProjectDialog:(id)sender
+{
 	self.project = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:[self managedObjectContext]];
 	self.project.projectName = self.nameForNewProject;
 	self.project.enableLoging = @(self.enableLogging);
@@ -195,13 +195,15 @@
 	}
 	[self.addProjectDialog orderOut:nil];
 	self.project = nil;
-	
-	
 }
-- (IBAction)cancelAddProjectDialog:(id)sender {
+- (IBAction)cancelAddProjectDialog:(id)sender
+{
 	[self.addProjectDialog orderOut:nil]; 
 }
-- (IBAction)pickLogFileDirectory:(id)sender {
+
+//TODO: Clean up code for file picker
+- (IBAction)pickLogFileDirectory:(id)sender
+{
 	//-----------------
 	//NSOpenPanel: Displaying a File Open Dialog in OS X 10.7
 	//From: http://cyborgdino.com/2012/02/nsopenpanel-displaying-a-file-open-dialog-in-os-x-10-7/
@@ -243,9 +245,8 @@
 		}
 	}
 }
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
-						change:(NSDictionary *)change context:(void *)context {
-	
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
 	if ([keyPath isEqualToString:@"nameForNewProject"]) {
 		[self setValue:[self.nameForNewProject stringByAppendingString:@".txt"] forKey:@"fileNameForNewProject"];
 	}
@@ -255,12 +256,12 @@
 	if ([keyPath isEqualToString:@"pathForNewProject"]) {
 		[self setValue:[self.pathForNewProject stringByAppendingString:self.fileNameForNewProject] forKey:@"filePathForNewProject"];
 	}
-	
 }
 
 #pragma mark -
 #pragma mark Fetch Methods
-- (NSArray*) fetchProjectList {
+- (NSArray*) fetchProjectList
+{
 	
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Project" inManagedObjectContext:[self managedObjectContext]];
@@ -280,7 +281,8 @@
 	
 	return projList;
 }
-- (id) fetchProject:(NSString*)aProject {
+- (id) fetchProject:(NSString*)aProject
+{
 	
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Project" inManagedObjectContext:[self managedObjectContext]];
@@ -295,18 +297,18 @@
 		NSLog(@"Fetch Error: %@", error);
 	}
 	return fetchedObjects[0];
-	
-	
 }
 
 #pragma mark -
 #pragma mark User Default Convenience Methods
-- (void)writeDefaults:(id)value toKey:(NSString*)key  {
+- (void)writeDefaults:(id)value toKey:(NSString*)key
+{
 	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:value forKey:key];
 	[defaults synchronize];
 }
-- (NSString*)readDefaultsForKey:(NSString*)key {
+- (NSString*)readDefaultsForKey:(NSString*)key
+{
 	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 	NSString* value = [[NSString alloc] initWithString:[defaults stringForKey:key]];
 	return value;
@@ -315,8 +317,8 @@
 #pragma mark -
 #pragma mark Format Time String Method
 
-- (NSString*)nicelyFormattedTimeStringFrom:(int)aNumberOfSeconds {
-	
+- (NSString*)nicelyFormattedTimeStringFrom:(int)aNumberOfSeconds
+{
 	int hours = aNumberOfSeconds / 3600,remainder = aNumberOfSeconds % 3600,minutes = remainder / 60,seconds = remainder % 60;
 	
 	NSMutableArray* sessionLength = [NSMutableArray array];
@@ -339,7 +341,8 @@
 #pragma mark -
 #pragma mark Log Session Method
 
-- (void)logSession {
+- (void)logSession
+{
 	NSString* logString = [@[[[NSDate date] dateString],@"Session Start:",[self.session.startTime timeString],
 							@"Session End:",[self.session.endTime timeString],@"Session Total:",[self nicelyFormattedTimeStringFrom:[self.session.sessionTotalTime intValue]],@"Project Total:",[self nicelyFormattedTimeStringFrom:[self.project.projectTotalTimeCounter intValue]],@"\n"] componentsJoinedByString:@" "];
 	

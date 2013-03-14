@@ -8,12 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface AppDelegate : NSObject <NSApplicationDelegate> {
-	
-	NSMenuItem *startMenuItem, *stopMenuItem;
-
-
-}
+@interface AppDelegate : NSObject <NSApplicationDelegate>
 
 #pragma mark -
 #pragma mark Core Data Properties

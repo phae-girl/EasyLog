@@ -13,6 +13,7 @@
 @interface AppDelegate ()
 @property (copy) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject, *currentProjectName;
 @property BOOL enableLogging;
+@property NSMenuItem *startMenuItem, *stopMenuItem;
 @property Project* project;
 @property Session* session;
 @property NSStatusItem *statusItem;
@@ -81,13 +82,13 @@
 	[self.statusItem setImage:[NSImage imageNamed:@"Icon"]];
 	[self.menu setAutoenablesItems:NO];
 	
-	startMenuItem = [[NSMenuItem alloc]initWithTitle:@"Start Tracking" action:@selector(userSelectedStartLoggingFromMenuBar:) keyEquivalent:@""];
-	stopMenuItem = [[NSMenuItem alloc]initWithTitle:@"Stop Tracking" action:@selector(userSelectedStopLoggingFromMenuBar:) keyEquivalent:@""];
-	[startMenuItem setEnabled:YES];
-	[stopMenuItem setEnabled:NO];
+	_startMenuItem = [[NSMenuItem alloc]initWithTitle:@"Start Tracking" action:@selector(userSelectedStartLoggingFromMenuBar:) keyEquivalent:@""];
+	_stopMenuItem = [[NSMenuItem alloc]initWithTitle:@"Stop Tracking" action:@selector(userSelectedStopLoggingFromMenuBar:) keyEquivalent:@""];
+	[self.startMenuItem setEnabled:YES];
+	[self.stopMenuItem setEnabled:NO];
 	
-	[self.menu insertItem:startMenuItem atIndex:0];
-	[self.menu insertItem:stopMenuItem atIndex:1];
+	[self.menu insertItem:self.startMenuItem atIndex:0];
+	[self.menu insertItem:self.stopMenuItem atIndex:1];
 	
 	self.currentProjectName = @"Select a Project...";
 	// For use with a window opening from the statusbar icon. Maybe a popover would be better than a menu?
@@ -104,9 +105,9 @@
 		[self userSelectedSelectProjectFromMenuBar:nil];
 	}
 	else {
-		[startMenuItem setTitle:[NSString stringWithFormat: @"Tracking: %@", self.project.projectName]];
-		[startMenuItem setEnabled:NO];
-		[stopMenuItem setEnabled:YES];
+		[self.startMenuItem setTitle:[NSString stringWithFormat: @"Tracking: %@", self.project.projectName]];
+		[self.startMenuItem setEnabled:NO];
+		[self.stopMenuItem setEnabled:YES];
 		
 		self.session = (Session*)[NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:[self managedObjectContext]];
 		self.session.startTime = [NSDate date];
@@ -127,9 +128,9 @@
 			[self logSession];
 		}
 	}
-	[startMenuItem setEnabled:YES];
-	[stopMenuItem setEnabled:NO];
-	[startMenuItem setTitle:[NSString stringWithFormat: @"Resume %@", self.project.projectName]];
+	[self.startMenuItem setEnabled:YES];
+	[self.stopMenuItem setEnabled:NO];
+	[self.startMenuItem setTitle:[NSString stringWithFormat: @"Resume %@", self.project.projectName]];
 	
 	_session = nil;
 }

@@ -11,7 +11,7 @@
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
 	
 	NSMenuItem *startMenuItem, *stopMenuItem;
-	NSStatusItem *statusItem;
+
 
 }
 

@@ -15,6 +15,7 @@
 @property BOOL enableLogging;
 @property Project* project;
 @property Session* session;
+@property NSStatusItem *statusItem;
 
 @end
 
@@ -74,10 +75,10 @@
 - (void)awakeFromNib
 {
 	
-	statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
-	[statusItem setMenu:self.menu];
-	[statusItem setHighlightMode:YES];
-	[statusItem setImage:[NSImage imageNamed:@"Icon"]];
+	_statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+	[self.statusItem setMenu:self.menu];
+	[self.statusItem setHighlightMode:YES];
+	[self.statusItem setImage:[NSImage imageNamed:@"Icon"]];
 	[self.menu setAutoenablesItems:NO];
 	
 	startMenuItem = [[NSMenuItem alloc]initWithTitle:@"Start Tracking" action:@selector(userSelectedStartLoggingFromMenuBar:) keyEquivalent:@""];

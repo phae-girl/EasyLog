@@ -10,6 +10,12 @@
 #import "Project.h"
 #import "Session.h"
 
+@interface AppDelegate ()
+@property (copy) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject;
+@property BOOL enableLogging;
+
+@end
+
 @implementation NSDate (FormattedStrings)
 - (NSString *)timeString
 {
@@ -26,7 +32,6 @@
 }
 
 @end
-
 
 @implementation AppDelegate
 {
@@ -49,11 +54,6 @@
 @synthesize projectListWindow = _projectListWindow;
 @synthesize addProjectDialog = _addProjectDialog;
 @synthesize selectProjectWindow = _selectProjectWindow;
-
-#pragma mark -
-#pragma mark Internal
-@synthesize nameForNewProject, fileNameForNewProject, pathForNewProject, filePathForNewProject;
-@synthesize enableLogging;
 
 #pragma mark -
 #pragma mark Temporary Methods
@@ -135,7 +135,7 @@
 	if (session) {
 		session.endTime = [NSDate date];
 		session.sessionTotalTime = [NSNumber numberWithInt:[session.endTime timeIntervalSinceDate:session.startTime]];
-		project.projectTotalTimeCounter = [NSNumber numberWithInt:[project.projectTotalTimeCounter intValue] + [session.sessionTotalTime intValue]];
+		project.projectTotalTimeCounter = @([project.projectTotalTimeCounter intValue] + [session.sessionTotalTime intValue]);
 		project.projectTotalTime = [self nicelyFormattedTimeStringFrom:[project.projectTotalTimeCounter intValue]];
 		[self saveAction:nil];
 		
@@ -157,7 +157,7 @@
 	self.enableLogging = YES;
 	self.fileNameForNewProject = [self.nameForNewProject stringByAppendingString:@".txt"];
 	self.pathForNewProject = @"~/Documents/";
-	self.filePathForNewProject = [self.pathForNewProject stringByAppendingString:fileNameForNewProject];
+	self.filePathForNewProject = [self.pathForNewProject stringByAppendingString:_fileNameForNewProject];
 	
 	[self addObserver:self forKeyPath:@"nameForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
 	[self addObserver:self forKeyPath:@"fileNameForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
@@ -193,7 +193,7 @@
 - (IBAction)saveAndCloseAddProjectDialog:(id)sender {
 	project = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:[self managedObjectContext]];
 	project.projectName = self.nameForNewProject;
-	project.enableLoging = [NSNumber numberWithBool:self.enableLogging];
+	project.enableLoging = @(self.enableLogging);
 	project.projectTotalTimeCounter = 0;
 	project.logFilePath = [self.filePathForNewProject stringByExpandingTildeInPath];
 	
@@ -251,7 +251,7 @@
 		
 		for( i = 0; i < [files count]; i++ ) {
 			// Do something with the filename.
-			self.pathForNewProject = [[[[files objectAtIndex:i] path] stringByAbbreviatingWithTildeInPath]stringByAppendingString:@"/"];
+			self.pathForNewProject = [[[files[i] path] stringByAbbreviatingWithTildeInPath]stringByAppendingString:@"/"];
 			
 		}
 	}
@@ -307,7 +307,7 @@
 	if (fetchedObjects == nil) {
 		NSLog(@"Fetch Error: %@", error);
 	}
-	return [fetchedObjects objectAtIndex:0];
+	return fetchedObjects[0];
 	
 	
 }
@@ -353,8 +353,8 @@
 #pragma mark Log Session Method
 
 - (void)logSession {
-	NSString* logString = [[NSArray arrayWithObjects:[[NSDate date] dateString],@"Session Start:",[session.startTime timeString],
-							@"Session End:",[session.endTime timeString],@"Session Total:",[self nicelyFormattedTimeStringFrom:[session.sessionTotalTime intValue]],@"Project Total:",[self nicelyFormattedTimeStringFrom:[project.projectTotalTimeCounter intValue]],@"\n",nil] componentsJoinedByString:@" "];
+	NSString* logString = [@[[[NSDate date] dateString],@"Session Start:",[session.startTime timeString],
+							@"Session End:",[session.endTime timeString],@"Session Total:",[self nicelyFormattedTimeStringFrom:[session.sessionTotalTime intValue]],@"Project Total:",[self nicelyFormattedTimeStringFrom:[project.projectTotalTimeCounter intValue]],@"\n"] componentsJoinedByString:@" "];
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	

@@ -33,11 +33,6 @@
 @property (weak) IBOutlet NSWindow *selectProjectWindow;
 
 #pragma mark -
-#pragma mark Internal
-@property (weak) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject;
-@property BOOL enableLogging;
-
-#pragma mark -
 #pragma mark Temporary Methods
 - (IBAction)userDidSelectProject:(id)sender;
 - (IBAction)userSelectedStartFromSelectProjectDialog:(id)sender;

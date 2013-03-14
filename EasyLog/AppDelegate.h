@@ -22,31 +22,34 @@
 
 #pragma mark -
 #pragma mark Core Data Properties
-@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
 
 #pragma mark -
 #pragma mark Windows and Dialogs
-@property (weak) IBOutlet NSWindow *projectListWindow;
 @property (weak) IBOutlet NSWindow *addProjectDialog;
+@property (weak) IBOutlet NSWindow *projectListWindow;
 @property (weak) IBOutlet NSWindow *selectProjectWindow;
 
 #pragma mark -
 #pragma mark Temporary Methods
 - (IBAction)userDidSelectProject:(id)sender;
-- (IBAction)userSelectedStartFromSelectProjectDialog:(id)sender;
-- (IBAction)userSelectedCancelFromSelectProjectDialog:(id)sender;
 - (IBAction)userSelectedAddProjectFromProjectDialog:(id)sender;
+- (IBAction)userSelectedCancelFromSelectProjectDialog:(id)sender;
+- (IBAction)userSelectedStartFromSelectProjectDialog:(id)sender;
+
 
 
 #pragma mark -
 #pragma mark Menu Bar Methods
+- (IBAction)userSelectedAddProjectFromMenuBar:(id)sender;
+- (IBAction)userSelectedQuitAppFromMenuBar:(id)sender;
+- (IBAction)userSelectedSelectProjectFromMenuBar:(id)sender;
 - (IBAction)userSelectedStartLoggingFromMenuBar:(id)sender;
 - (IBAction)userSelectedStopLoggingFromMenuBar:(id)sender;
-- (IBAction)userSelectedAddProjectFromMenuBar:(id)sender;
-- (IBAction)userSelectedSelectProjectFromMenuBar:(id)sender;
-- (IBAction)userSelectedQuitAppFromMenuBar:(id)sender;
+
 
 #pragma mark -
 #pragma mark Preferences Dialog Methods
@@ -54,9 +57,10 @@
 
 #pragma mark -
 #pragma mark Add Project Dialog Methods
-- (IBAction)saveAndCloseAddProjectDialog:(id)sender;
 - (IBAction)cancelAddProjectDialog:(id)sender;
 - (IBAction)pickLogFileDirectory:(id)sender;
+- (IBAction)saveAndCloseAddProjectDialog:(id)sender;
+
 
 #pragma mark -
 #pragma mark Built in Core Data Methods

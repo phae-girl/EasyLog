@@ -16,11 +16,6 @@
 }
 
 #pragma mark -
-#pragma mark Temporary Properties
-@property NSString *currentProjectName;
-
-
-#pragma mark -
 #pragma mark Core Data Properties
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

@@ -11,7 +11,7 @@
 #import "Session.h"
 
 @interface AppDelegate ()
-@property (copy) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject;
+@property (copy) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject, *currentProjectName;
 @property BOOL enableLogging;
 
 @end
@@ -38,10 +38,6 @@
 	Session* session;
 	Project* project;
 }
-#pragma mark -
-#pragma mark Temporary Properties
-@synthesize currentProjectName;
-
 
 #pragma mark -
 #pragma mark Core Data Properties
@@ -64,7 +60,7 @@
 		project = nil;
 	}
 	if (project.projectName == NULL) {
-		project = [self fetchProject:currentProjectName];
+		project = [self fetchProject:self.currentProjectName];
 	}
 }
 
@@ -102,7 +98,7 @@
 	[menu insertItem:stopMenuItem atIndex:1];
 	
 	
-	currentProjectName = @"Select a Project...";
+	self.currentProjectName = @"Select a Project...";
 	// For use with a window opening from the statusbar icon. Maybe a popover would be better than a menu?
 	//[statusItem setTarget:self];
 	//[statusItem setAction:@selector(openWindow:)];

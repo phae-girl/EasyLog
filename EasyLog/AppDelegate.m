@@ -13,7 +13,7 @@
 @interface AppDelegate ()
 @property (copy) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject, *currentProjectName;
 @property BOOL enableLogging;
-
+@property Session* session;
 @end
 
 @implementation NSDate (FormattedStrings)
@@ -35,7 +35,7 @@
 
 @implementation AppDelegate
 {
-	Session* session;
+	
 	Project* project;
 }
 
@@ -120,18 +120,18 @@
 		[startMenuItem setEnabled:NO];
 		[stopMenuItem setEnabled:YES];
 		
-		session = (Session*)[NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:[self managedObjectContext]];
-		session.startTime = [NSDate date];
+		self.session = (Session*)[NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:[self managedObjectContext]];
+		self.session.startTime = [NSDate date];
 		
 	}
 	[self saveAction:nil];
 }
 - (IBAction)userSelectedStopLoggingFromMenuBar:(id)sender {
 		
-	if (session) {
-		session.endTime = [NSDate date];
-		session.sessionTotalTime = [NSNumber numberWithInt:[session.endTime timeIntervalSinceDate:session.startTime]];
-		project.projectTotalTimeCounter = @([project.projectTotalTimeCounter intValue] + [session.sessionTotalTime intValue]);
+	if (self.session) {
+		self.session.endTime = [NSDate date];
+		self.session.sessionTotalTime = [NSNumber numberWithInt:[self.session.endTime timeIntervalSinceDate:self.session.startTime]];
+		project.projectTotalTimeCounter = @([project.projectTotalTimeCounter intValue] + [self.session.sessionTotalTime intValue]);
 		project.projectTotalTime = [self nicelyFormattedTimeStringFrom:[project.projectTotalTimeCounter intValue]];
 		[self saveAction:nil];
 		
@@ -145,7 +145,7 @@
 	[stopMenuItem setEnabled:NO];
 	[startMenuItem setTitle:[NSString stringWithFormat: @"Resume %@", project.projectName]];
 	
-	session = nil;
+	_session = nil;
 }
 - (IBAction)userSelectedAddProjectFromMenuBar:(id)sender {
 	
@@ -349,8 +349,8 @@
 #pragma mark Log Session Method
 
 - (void)logSession {
-	NSString* logString = [@[[[NSDate date] dateString],@"Session Start:",[session.startTime timeString],
-							@"Session End:",[session.endTime timeString],@"Session Total:",[self nicelyFormattedTimeStringFrom:[session.sessionTotalTime intValue]],@"Project Total:",[self nicelyFormattedTimeStringFrom:[project.projectTotalTimeCounter intValue]],@"\n"] componentsJoinedByString:@" "];
+	NSString* logString = [@[[[NSDate date] dateString],@"Session Start:",[self.session.startTime timeString],
+							@"Session End:",[self.session.endTime timeString],@"Session Total:",[self nicelyFormattedTimeStringFrom:[self.session.sessionTotalTime intValue]],@"Project Total:",[self nicelyFormattedTimeStringFrom:[project.projectTotalTimeCounter intValue]],@"\n"] componentsJoinedByString:@" "];
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	

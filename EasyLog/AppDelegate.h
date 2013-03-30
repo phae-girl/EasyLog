@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate>
 
 #pragma mark -
 #pragma mark Core Data Properties
@@ -22,6 +22,8 @@
 @property (weak) IBOutlet NSWindow *addProjectDialog;
 @property (weak) IBOutlet NSWindow *projectListWindow;
 @property (weak) IBOutlet NSWindow *selectProjectWindow;
+@property (weak) IBOutlet NSTableView *projectListTableView;
+
 
 #pragma mark -
 #pragma mark Project Dialog Methods
@@ -41,6 +43,9 @@
 #pragma mark -
 #pragma mark Preferences Dialog Methods
 - (IBAction)openProjectsList:(id)sender;
+- (IBAction)addProject:(id)sender;
+- (IBAction)removeProject:(id)sender;
+
 
 #pragma mark -
 #pragma mark Add Project Dialog Methods

@@ -176,6 +176,17 @@
 	[self.projectListWindow makeKeyAndOrderFront:nil];
 }
 
+- (IBAction)addProject:(id)sender {
+    [self.managedObjectContext insertObject:[[Project alloc]init]];
+}
+
+- (IBAction)removeProject:(id)sender {
+    NSInteger row = self.projectListTableView.selectedRow;
+    if (row != -1) {
+        [[self managedObjectContext]removeValueAtIndex:row fromPropertyWithKey:@"Projects"];
+    }
+}
+
 #pragma mark -
 #pragma mark Add Project Dialog Methods
 - (IBAction)saveAndCloseAddProjectDialog:(id)sender

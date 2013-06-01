@@ -8,11 +8,13 @@
 
 #import "AppController.h"
 #import "ProjectWindowController.h"
+#import "PrefsWindowController.h"
 
 @interface AppController ()
 @property (nonatomic, strong)NSStatusItem *statusItem;
 @property (nonatomic, strong)NSMenu *menu;
 @property (nonatomic)ProjectWindowController *projectWindow;
+@property (nonatomic)PrefsWindowController *prefsWindow;
 
 @end
 
@@ -47,7 +49,7 @@
 	[self.menu addItem:[[NSMenuItem alloc]initWithTitle:@"New Project" action:@selector(newProject) keyEquivalent:@"N"]];
 	[self.menu addItem:[[NSMenuItem alloc]initWithTitle:@"Stop All" action:nil keyEquivalent:@""]];
 	[self.menu addItem:[NSMenuItem separatorItem]];
-	[self.menu addItem:[[NSMenuItem alloc]initWithTitle:@"Preferences" action:nil keyEquivalent:@","]];
+	[self.menu addItem:[[NSMenuItem alloc]initWithTitle:@"Preferences" action:@selector(preferences) keyEquivalent:@","]];
 	[self.menu addItem:[NSMenuItem separatorItem]];
 	[self.menu addItem:[[NSMenuItem alloc]initWithTitle:@"Quit" action:@selector(quitApp) keyEquivalent:@"q"]];
 	[[self.menu itemWithTitle:@"New Project"]setKeyEquivalentModifierMask:NSCommandKeyMask];
@@ -62,6 +64,12 @@
 {
 	_projectWindow = [[ProjectWindowController alloc]initWithWindowNibName:@"ProjectWindow"];
 	[self.projectWindow showWindow:self];
+}
+
+- (void)preferences
+{
+	_prefsWindow = [[PrefsWindowController alloc]initWithWindowNibName:@"PrefsWindow"];
+	[self.prefsWindow showWindow:self];
 }
 
 - (void)quitApp

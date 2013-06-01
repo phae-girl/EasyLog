@@ -1,18 +1,18 @@
 //
-//  NewProjectWindowController.m
+//  PrefsWindowController.m
 //  EasyLog
 //
 //  Created by Phaedra Deepsky on 2013-06-01.
 //  Copyright (c) 2013 Phaedra Deepsky. All rights reserved.
 //
 
-#import "ProjectWindowController.h"
+#import "PrefsWindowController.h"
 
-@interface ProjectWindowController ()
+@interface PrefsWindowController () 
 
 @end
 
-@implementation ProjectWindowController
+@implementation PrefsWindowController
 
 - (id)initWithWindow:(NSWindow *)window
 {
@@ -35,4 +35,6 @@
 {
 	NSLog(@"%s",__PRETTY_FUNCTION__);
 }
+
+
 @end

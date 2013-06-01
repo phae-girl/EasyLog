@@ -20,6 +20,8 @@
 		EDB74F4E1759AB4E00879217 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDB74F4D1759AB4E00879217 /* AppController.m */; };
 		EDB74F541759B3DC00879217 /* ProjectWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDB74F521759B3DC00879217 /* ProjectWindowController.m */; };
 		EDB74F551759B3DC00879217 /* ProjectWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDB74F531759B3DC00879217 /* ProjectWindow.xib */; };
+		EDB74F5A1759B92F00879217 /* PrefsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDB74F581759B92F00879217 /* PrefsWindowController.m */; };
+		EDB74F5B1759B92F00879217 /* PrefsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDB74F591759B92F00879217 /* PrefsWindow.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +49,9 @@
 		EDB74F511759B3DC00879217 /* ProjectWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectWindowController.h; sourceTree = "<group>"; };
 		EDB74F521759B3DC00879217 /* ProjectWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectWindowController.m; sourceTree = "<group>"; };
 		EDB74F531759B3DC00879217 /* ProjectWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectWindow.xib; sourceTree = "<group>"; };
+		EDB74F571759B92F00879217 /* PrefsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefsWindowController.h; sourceTree = "<group>"; };
+		EDB74F581759B92F00879217 /* PrefsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrefsWindowController.m; sourceTree = "<group>"; };
+		EDB74F591759B92F00879217 /* PrefsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrefsWindow.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +69,9 @@
 		9155C9021649D91C000034EC = {
 			isa = PBXGroup;
 			children = (
-				EDB74F561759B3E200879217 /* NewProjectWIndow */,
+				EDB74F5D1759B9B100879217 /* AppController */,
+				EDB74F5C1759B93500879217 /* PrefsWindow */,
+				EDB74F561759B3E200879217 /* ProjectWIndow */,
 				9155C9171649D91C000034EC /* EasyLog */,
 				9155C9101649D91C000034EC /* Frameworks */,
 				9155C90E1649D91C000034EC /* Products */,
@@ -103,8 +110,6 @@
 			children = (
 				9155C9231649D91D000034EC /* AppDelegate.h */,
 				9155C9241649D91D000034EC /* AppDelegate.m */,
-				EDB74F4C1759AB4E00879217 /* AppController.h */,
-				EDB74F4D1759AB4E00879217 /* AppController.m */,
 				9155C9261649D91D000034EC /* MainMenu.xib */,
 				9155C9291649D91D000034EC /* EasyLog.xcdatamodeld */,
 				9155C93D1649FD65000034EC /* Project.h */,
@@ -129,14 +134,34 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		EDB74F561759B3E200879217 /* NewProjectWIndow */ = {
+		EDB74F561759B3E200879217 /* ProjectWIndow */ = {
 			isa = PBXGroup;
 			children = (
 				EDB74F511759B3DC00879217 /* ProjectWindowController.h */,
 				EDB74F521759B3DC00879217 /* ProjectWindowController.m */,
 				EDB74F531759B3DC00879217 /* ProjectWindow.xib */,
 			);
-			name = NewProjectWIndow;
+			name = ProjectWIndow;
+			sourceTree = "<group>";
+		};
+		EDB74F5C1759B93500879217 /* PrefsWindow */ = {
+			isa = PBXGroup;
+			children = (
+				EDB74F571759B92F00879217 /* PrefsWindowController.h */,
+				EDB74F581759B92F00879217 /* PrefsWindowController.m */,
+				EDB74F591759B92F00879217 /* PrefsWindow.xib */,
+			);
+			name = PrefsWindow;
+			sourceTree = "<group>";
+		};
+		EDB74F5D1759B9B100879217 /* AppController */ = {
+			isa = PBXGroup;
+			children = (
+				EDB74F4C1759AB4E00879217 /* AppController.h */,
+				EDB74F4D1759AB4E00879217 /* AppController.m */,
+			);
+			name = AppController;
+			path = EasyLog;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,6 +220,7 @@
 				9155C9281649D91D000034EC /* MainMenu.xib in Resources */,
 				9155C941164A0219000034EC /* Icon.png in Resources */,
 				EDB74F551759B3DC00879217 /* ProjectWindow.xib in Resources */,
+				EDB74F5B1759B92F00879217 /* PrefsWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,6 +238,7 @@
 				9155C93F1649FD65000034EC /* Project.m in Sources */,
 				EDB74F4E1759AB4E00879217 /* AppController.m in Sources */,
 				EDB74F541759B3DC00879217 /* ProjectWindowController.m in Sources */,
+				EDB74F5A1759B92F00879217 /* PrefsWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

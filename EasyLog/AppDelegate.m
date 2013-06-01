@@ -9,16 +9,21 @@
 #import "AppDelegate.h"
 #import "Project.h"
 #import "Session.h"
+#import "AppController.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <AppControllerDelegateProtocol>
 @property (copy) NSString *nameForNewProject, *fileNameForNewProject, *pathForNewProject, *filePathForNewProject, *currentProjectName;
 @property BOOL enableLogging;
-@property NSMenuItem *startMenuItem, *stopMenuItem;
 @property Project* project;
 @property Session* session;
-@property NSStatusItem *statusItem;
+
+//June 1, 2013 refactoring additions
+@property (nonatomic, strong)AppController *appController;
 
 @end
+
+#pragma mark -
+#pragma mark NSDate Convenience Category
 
 @implementation NSDate (FormattedStrings)
 - (NSString *)timeString
@@ -58,106 +63,95 @@
 	}
 }
 
-- (IBAction)userSelectedStartFromSelectProjectDialog:(id)sender {
-	[self userSelectedStartLoggingFromMenuBar:nil];
-	[self.selectProjectWindow orderOut:nil];
-}
-
-- (IBAction)userSelectedCancelFromSelectProjectDialog:(id)sender {
-	[self.selectProjectWindow orderOut:nil];
-}
-- (IBAction)userSelectedAddProjectFromProjectDialog:(id)sender {
-	[self userSelectedAddProjectFromMenuBar:nil];
-	[self.selectProjectWindow orderOut:nil];
-}
+//- (IBAction)userSelectedStartFromSelectProjectDialog:(id)sender {
+//	[self userSelectedStartLoggingFromMenuBar:nil];
+//	[self.selectProjectWindow orderOut:nil];
+//}
+//
+//- (IBAction)userSelectedCancelFromSelectProjectDialog:(id)sender {
+//	[self.selectProjectWindow orderOut:nil];
+//}
+//- (IBAction)userSelectedAddProjectFromProjectDialog:(id)sender {
+//	[self userSelectedAddProjectFromMenuBar:nil];
+//	[self.selectProjectWindow orderOut:nil];
+//}
 
 #pragma mark -
 #pragma mark Awake and Init
-- (void)awakeFromNib
-{
-	
-	_statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
-	[self.statusItem setMenu:self.menu];
-	[self.statusItem setHighlightMode:YES];
-	[self.statusItem setImage:[NSImage imageNamed:@"Icon"]];
-	[self.menu setAutoenablesItems:NO];
-	
-	_startMenuItem = [[NSMenuItem alloc]initWithTitle:@"Start Tracking" action:@selector(userSelectedStartLoggingFromMenuBar:) keyEquivalent:@""];
-	_stopMenuItem = [[NSMenuItem alloc]initWithTitle:@"Stop Tracking" action:@selector(userSelectedStopLoggingFromMenuBar:) keyEquivalent:@""];
-	[self.startMenuItem setEnabled:YES];
-	[self.stopMenuItem setEnabled:NO];
-	
-	[self.menu insertItem:self.startMenuItem atIndex:0];
-	[self.menu insertItem:self.stopMenuItem atIndex:1];
-	
-	self.currentProjectName = @"Select a Project...";
-	// For use with a window opening from the statusbar icon. Maybe a popover would be better than a menu?
-	//[statusItem setTarget:self];
-	//[statusItem setAction:@selector(openWindow:)];
-}
 
-#pragma mark -
-#pragma mark Menu Bar Methods
-- (IBAction)userSelectedStartLoggingFromMenuBar:(id)sender
+-(void)applicationDidFinishLaunching:(NSNotification *)notification
 {
-
-	if (self.project == NULL) {
-		[self userSelectedSelectProjectFromMenuBar:nil];
+	if (!_appController) {
+		_appController = [[AppController alloc]init];
+		[self.appController setDelegate:self];
 	}
-	else {
-		[self.startMenuItem setTitle:[NSString stringWithFormat: @"Tracking: %@", self.project.projectName]];
-		[self.startMenuItem setEnabled:NO];
-		[self.stopMenuItem setEnabled:YES];
-		
-		self.session = (Session*)[NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:[self managedObjectContext]];
-		self.session.startTime = [NSDate date];
-		}
-	[self saveAction:nil];
 }
-- (IBAction)userSelectedStopLoggingFromMenuBar:(id)sender
-{
-		
-	if (self.session) {
-		self.session.endTime = [NSDate date];
-		self.session.sessionTotalTime = [NSNumber numberWithInt:[self.session.endTime timeIntervalSinceDate:self.session.startTime]];
-		self.project.projectTotalTimeCounter = @([self.project.projectTotalTimeCounter intValue] + [self.session.sessionTotalTime intValue]);
-		self.project.projectTotalTime = [self nicelyFormattedTimeStringFrom:[self.project.projectTotalTimeCounter intValue]];
-		[self saveAction:nil];
-		
-		if ([self.project.enableLoging boolValue]) {
-			[self logSession];
-		}
-	}
-	[self.startMenuItem setEnabled:YES];
-	[self.stopMenuItem setEnabled:NO];
-	[self.startMenuItem setTitle:[NSString stringWithFormat: @"Resume %@", self.project.projectName]];
-	
-	_session = nil;
-}
-- (IBAction)userSelectedAddProjectFromMenuBar:(id)sender
-{
-	
-	self.nameForNewProject = @"New Project";
-	self.enableLogging = YES;
-	self.fileNameForNewProject = [self.nameForNewProject stringByAppendingString:@".txt"];
-	self.pathForNewProject = @"~/Documents/";
-	self.filePathForNewProject = [self.pathForNewProject stringByAppendingString:_fileNameForNewProject];
-	
-	[self addObserver:self forKeyPath:@"nameForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
-	[self addObserver:self forKeyPath:@"fileNameForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
-	[self addObserver:self forKeyPath:@"pathForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
-	
-	[NSApp activateIgnoringOtherApps:YES];
-	[self.addProjectDialog makeKeyAndOrderFront:nil];
-}
-- (IBAction)userSelectedSelectProjectFromMenuBar:(id)sender {
-
-	[NSApp activateIgnoringOtherApps:YES];
-	[self.selectProjectWindow makeKeyAndOrderFront:nil];
-}
-
+//#pragma mark -
+//#pragma mark Menu Bar Methods
+//- (IBAction)userSelectedStartLoggingFromMenuBar:(id)sender
+//{
+//
+//	if (self.project == NULL) {
+//		[self userSelectedSelectProjectFromMenuBar:nil];
+//	}
+//	else {
+//		[self.startMenuItem setTitle:[NSString stringWithFormat: @"Tracking: %@", self.project.projectName]];
+//		[self.startMenuItem setEnabled:NO];
+//		[self.stopMenuItem setEnabled:YES];
+//		
+//		self.session = (Session*)[NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:[self managedObjectContext]];
+//		self.session.startTime = [NSDate date];
+//		}
+//	[self saveAction:nil];
+//}
+//- (IBAction)userSelectedStopLoggingFromMenuBar:(id)sender
+//{
+//		
+//	if (self.session) {
+//		self.session.endTime = [NSDate date];
+//		self.session.sessionTotalTime = [NSNumber numberWithInt:[self.session.endTime timeIntervalSinceDate:self.session.startTime]];
+//		self.project.projectTotalTimeCounter = @([self.project.projectTotalTimeCounter intValue] + [self.session.sessionTotalTime intValue]);
+//		self.project.projectTotalTime = [self nicelyFormattedTimeStringFrom:[self.project.projectTotalTimeCounter intValue]];
+//		[self saveAction:nil];
+//		
+//		if ([self.project.enableLoging boolValue]) {
+//			[self logSession];
+//		}
+//	}
+//	[self.startMenuItem setEnabled:YES];
+//	[self.stopMenuItem setEnabled:NO];
+//	[self.startMenuItem setTitle:[NSString stringWithFormat: @"Resume %@", self.project.projectName]];
+//	
+//	_session = nil;
+//}
+//- (IBAction)userSelectedAddProjectFromMenuBar:(id)sender
+//{
+//	
+//	self.nameForNewProject = @"New Project";
+//	self.enableLogging = YES;
+//	self.fileNameForNewProject = [self.nameForNewProject stringByAppendingString:@".txt"];
+//	self.pathForNewProject = @"~/Documents/";
+//	self.filePathForNewProject = [self.pathForNewProject stringByAppendingString:_fileNameForNewProject];
+//	
+//	[self addObserver:self forKeyPath:@"nameForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
+//	[self addObserver:self forKeyPath:@"fileNameForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
+//	[self addObserver:self forKeyPath:@"pathForNewProject" options:NSKeyValueObservingOptionNew context:NULL];
+//	
+//	[NSApp activateIgnoringOtherApps:YES];
+//	[self.addProjectDialog makeKeyAndOrderFront:nil];
+//}
+//- (IBAction)userSelectedSelectProjectFromMenuBar:(id)sender {
+//
+//	[NSApp activateIgnoringOtherApps:YES];
+//	[self.selectProjectWindow makeKeyAndOrderFront:nil];
+//}
+//
 - (IBAction)userSelectedQuitAppFromMenuBar:(id)sender {
+	[self quitApp];
+}
 
+-(void)quitApp
+{
 	NSError *error = nil;
 	
 	if (![[self managedObjectContext]save:&error]) {
@@ -165,6 +159,7 @@
 	}
 	
 	[NSApp terminate:nil];
+
 }
 
 #pragma mark -

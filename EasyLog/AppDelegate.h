@@ -25,20 +25,20 @@
 @property (weak) IBOutlet NSTableView *projectListTableView;
 
 
-#pragma mark -
-#pragma mark Project Dialog Methods
-- (IBAction)userDidSelectProject:(id)sender;
-- (IBAction)userSelectedAddProjectFromProjectDialog:(id)sender;
-- (IBAction)userSelectedCancelFromSelectProjectDialog:(id)sender;
-- (IBAction)userSelectedStartFromSelectProjectDialog:(id)sender;
-
-#pragma mark -
-#pragma mark Menu Bar Methods
-- (IBAction)userSelectedAddProjectFromMenuBar:(id)sender;
-- (IBAction)userSelectedQuitAppFromMenuBar:(id)sender;
-- (IBAction)userSelectedSelectProjectFromMenuBar:(id)sender;
-- (IBAction)userSelectedStartLoggingFromMenuBar:(id)sender;
-- (IBAction)userSelectedStopLoggingFromMenuBar:(id)sender;
+//#pragma mark -
+//#pragma mark Project Dialog Methods
+//- (IBAction)userDidSelectProject:(id)sender;
+//- (IBAction)userSelectedAddProjectFromProjectDialog:(id)sender;
+//- (IBAction)userSelectedCancelFromSelectProjectDialog:(id)sender;
+//- (IBAction)userSelectedStartFromSelectProjectDialog:(id)sender;
+//
+//#pragma mark -
+//#pragma mark Menu Bar Methods
+//- (IBAction)userSelectedAddProjectFromMenuBar:(id)sender;
+//- (IBAction)userSelectedQuitAppFromMenuBar:(id)sender;
+//- (IBAction)userSelectedSelectProjectFromMenuBar:(id)sender;
+//- (IBAction)userSelectedStartLoggingFromMenuBar:(id)sender;
+//- (IBAction)userSelectedStopLoggingFromMenuBar:(id)sender;
 
 #pragma mark -
 #pragma mark Preferences Dialog Methods
